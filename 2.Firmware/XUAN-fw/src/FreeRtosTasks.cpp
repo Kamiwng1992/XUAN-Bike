@@ -2,8 +2,10 @@
 #include "filter.h"
 
 TaskHandle_t handleTaskRobotControl;
-TaskHandle_t handleTaskPrint;
 TaskHandle_t handleTaskServoLerp;
+TaskHandle_t handleTaskDisplay;
+
+bool motorEnable = false;
 
 hw_timer_t *timer = NULL;
 
@@ -14,6 +16,12 @@ void IRAM_ATTR onTimer()
     xHigherPriorityTaskWoken = pdFALSE;
     vTaskNotifyGiveFromISR(handleTaskRobotControl, &xHigherPriorityTaskWoken);
 }
+
+void HandleInterrupt()
+{
+    motorEnable = !motorEnable;
+}
+
 
 void InitTasks()
 {
@@ -35,6 +43,15 @@ void InitTasks()
         &handleTaskServoLerp,
         1);
 
+    xTaskCreatePinnedToCore(
+        TaskDisplay,
+        "TaskDisplay",
+        10000,
+        NULL,
+        1,
+        &handleTaskDisplay,
+        1);
+
     // 5ms period hardware timer, to invoke TaskRobotControl
     timer = timerBegin(0, 80, true);
     timerAttachInterrupt(timer, &onTimer, true);
@@ -43,9 +60,9 @@ void InitTasks()
 }
 
 /*低通滤波参数*/
-#define GYRO_LPF_CUTOFF_FREQ    150
+#define GYRO_LPF_CUTOFF_FREQ    100
 biquadFilter_t gyroFilterLPF[3];//二阶低通滤波器
-#define ACCEL_LPF_CUTOFF_FREQ    150
+#define ACCEL_LPF_CUTOFF_FREQ    50
 biquadFilter_t accFilterLPF[3];//二阶低通滤波器
 
 [[noreturn]]
@@ -64,17 +81,20 @@ void TaskRobotControl(void *parameter)
     ESP32Can.CANInit();
 
     // Init MPU6050
-    Wire.begin(32, 33);
-    Wire.setClock(400000);
+    Wire1.begin(32, 33);
+    Wire1.setClock(400000);
     do
     {
         accelgyro.initialize();
         delay(100);
     } while (!accelgyro.testConnection());
 
-    accelgyro.setXGyroOffset(76);
-    accelgyro.setYGyroOffset(-21);
-    accelgyro.setZGyroOffset(-17);
+    accelgyro.setXAccelOffset(-2695);
+    accelgyro.setYAccelOffset(1311);
+    accelgyro.setZAccelOffset(4557);
+    accelgyro.setXGyroOffset(27);
+    accelgyro.setYGyroOffset(-23);
+    accelgyro.setZGyroOffset(6);
 
     for (int axis = 0; axis < 3; axis++)
     {
@@ -121,9 +141,9 @@ void TaskRobotControl(void *parameter)
         robot.gy_dps_fil = biquadFilterApply(&gyroFilterLPF[1], robot.gy_dps);
         robot.gz_dps_fil = biquadFilterApply(&gyroFilterLPF[2], robot.gz_dps);
 
-        float mode2_pitch = -atan2(robot.ay_g, -robot.az_g) * RAD_TO_DEG;
+        float mode2_pitch = -atan2(robot.ay_g_fil, robot.az_g_fil) * RAD_TO_DEG;
         robot.mode2_pitch =
-            FILTER_RATIO * (robot.mode2_pitch + robot.gx_dps * 0.005) + (1 - FILTER_RATIO) * mode2_pitch;
+            FILTER_RATIO * (robot.mode2_pitch + robot.gx_dps_fil * 0.005) + (1 - FILTER_RATIO) * mode2_pitch;
 
         if (tick % 2) // every 10ms at 100Hz
         {
@@ -171,7 +191,8 @@ void TaskRobotControl(void *parameter)
             tx_frame.data.u8[2] = 0x80;
             tx_frame.data.u8[3] = 0x23;
 
-            float val = PID_AngleX.output;
+            float val = motorEnable ? PID_AngleX.output : 0;
+
             mCanBufByte = (unsigned char *) &val;
             for (int i = 4; i < 8; i++)
                 tx_frame.data.u8[i] = *(mCanBufByte + i - 4);
@@ -202,29 +223,27 @@ void TaskRobotControl(void *parameter)
                 PID_SpeedX.integralError += error;
 
                 float i_term = PID_SpeedX.i * PID_SpeedX.integralError;
-                if (i_term > 3)
+                if (i_term > 10)
                 {
-                    i_term = 3;
-                    PID_SpeedX.integralError = 3 / PID_SpeedX.i;
-                } else if (i_term < -3)
+                    i_term = 10;
+                    PID_SpeedX.integralError = 5 / PID_SpeedX.i;
+                } else if (i_term < -10)
                 {
-                    i_term = -3;
-                    PID_SpeedX.integralError = -3 / PID_SpeedX.i;
+                    i_term = -10;
+                    PID_SpeedX.integralError = -5 / PID_SpeedX.i;
                 }
 
                 PID_SpeedX.output = PID_SpeedX.p * error + i_term;
 
-                if (PID_SpeedX.output > 5)
+                if (PID_SpeedX.output > 10)
                 {
-                    PID_SpeedX.output = 5;
-                } else if (PID_SpeedX.output < -5)
+                    PID_SpeedX.output = 10;
+                } else if (PID_SpeedX.output < -10)
                 {
-                    PID_SpeedX.output = -5;
+                    PID_SpeedX.output = -10;
                 }
 
                 PID_AngleX.setpoint = PID_AngleX.relax_point - PID_SpeedX.output;
-
-//                printf("%.3f,%.3f\n", PID_AngleX.setpoint, robot.mode2_pitch);
             }
         } else if (tick == 10) // every 50ms at 20Hz
         {
@@ -251,22 +270,6 @@ void TaskRobotControl(void *parameter)
     vTaskDelete(NULL);
 }
 
-[[noreturn]] void TaskPrint(void *parameter)
-{
-    delay(2000);
-
-    const portTickType xDelay = pdMS_TO_TICKS(50);
-
-    while (true)
-    {
-        Serial.println(PID_AngleX.output);
-
-        vTaskDelay(xDelay);
-    }
-
-    Serial.println("Ending task TaskPrint");
-    vTaskDelete(NULL);
-}
 
 [[noreturn]] void TaskServoLerp(void *parameter)
 {
@@ -283,5 +286,23 @@ void TaskRobotControl(void *parameter)
     }
 
     Serial.println("Ending task TaskServoLerp");
+    vTaskDelete(NULL);
+}
+
+[[noreturn]] void TaskDisplay(void *parameter)
+{
+    while (true)
+    {
+//        u8g2.clearBuffer();
+        u8g2.setCursor(0, 10);
+        u8g2.printf("Setpoint: %.3f", PID_AngleX.setpoint);
+        u8g2.setCursor(0, 20);
+        u8g2.printf("PitchAng: %.3f", robot.mode2_pitch);
+        u8g2.sendBuffer();
+
+        delay(100);
+    }
+
+    Serial.println("Ending task TaskDisplay");
     vTaskDelete(NULL);
 }

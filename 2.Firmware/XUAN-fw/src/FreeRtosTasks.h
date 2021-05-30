@@ -5,14 +5,14 @@
 #include "Robot.h"
 
 extern TaskHandle_t handleTaskRobotControl;
-extern TaskHandle_t handleTaskPrint;
+extern TaskHandle_t handleTaskDisplay;
 extern TaskHandle_t handleTaskServoLerp;
 
 void InitTasks();
 
 [[noreturn]] void TaskRobotControl(void *parameter);
 
-[[noreturn]] void TaskPrint(void *parameter);
+[[noreturn]] void TaskDisplay(void *parameter);
 
 [[noreturn]] void TaskServoLerp(void *parameter);
 

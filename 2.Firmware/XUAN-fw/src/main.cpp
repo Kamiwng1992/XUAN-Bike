@@ -20,6 +20,7 @@ Command cmdSy;
 //HardwareSerial CtrlSerial(1);
 //HardwareSerial RPiSerial(2);
 
+void HandleInterrupt();
 
 void setup()
 {
@@ -29,6 +30,9 @@ void setup()
     Serial.begin(115200);
     // CtrlSerial.begin(115200, SERIAL_8N1, 14, 13);
     // RPiSerial.begin(115200, SERIAL_8N1, 38, 37);
+    pinMode(26, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(26), HandleInterrupt, FALLING);
+
 
     cmdSave = cli.addCmd("save");
     cmdSave.setDescription(" Save all PID params.");

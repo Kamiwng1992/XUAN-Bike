@@ -33,3 +33,61 @@ sx -p 0.000003  -i 0.0000001
 #define GYRO_LPF_CUTOFF_FREQ    150 //原为80，适当增大后效果改善
 #define ACCEL_LPF_CUTOFF_FREQ    150
 ```
+
+---
+
+
+
+```
+#define GYRO_LPF_CUTOFF_FREQ    150 //原为80，适当增大后效果改善
+#define ACCEL_LPF_CUTOFF_FREQ    150
+```
+
+ax -p 700000 -i 0 -d 35000000 -s 1
+
+sx -p 0.000002  -i 0.00000003
+
+vel_gain = 0.00019999999494757503 (float)
+vel_integrator_gain = 0.006000000052154064 (float)
+
+---
+
+```
+#define FILTER_RATIO 0.999
+```
+
+```
+#define GYRO_LPF_CUTOFF_FREQ    100 //原为80，适当增大后效果改善
+#define ACCEL_LPF_CUTOFF_FREQ    50
+```
+
+ax -p 1000000 -i 0 -d 70000000 -s 1
+
+sx -p 0.000002  -i 0.00000003  √
+
+vel_gain = 0.0003 (float)
+vel_integrator_gain = 0.006 (float)
+
+---
+
+
+
+
+
+---
+
+```
+#define FILTER_RATIO 0.999
+```
+
+```
+#define GYRO_LPF_CUTOFF_FREQ    100 //原为80，适当增大后效果改善
+#define ACCEL_LPF_CUTOFF_FREQ    50
+```
+
+ax -p 1500000 -i 0 -d 80000000 -s 1
+
+sx -p 0.000002  -i 0.00000003  √
+
+vel_gain = 0.0003 (float)
+vel_integrator_gain = 0.006 (float)
