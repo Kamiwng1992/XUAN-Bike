@@ -72,3 +72,33 @@ MPU6050低通滤波寄存器中 setDLPFMode(MPU6050_DLPF_BW_98)的作用待检�
 PID output滑动滤波参数N=1待验证（是否可以去掉，加大效果是否更好？）
 
 Ctrl加电流，增加恢复力
+
+
+
+> **PID参数：**
+>
+> * 互补滤波器参数 [0.999]  
+> * ax -p 1500000 -i 0 -d 80000000 -s 1
+> * sx -p 0.000003  -i 0.00000003 
+>
+> **2阶ButterWorth滤波器参数：**
+>
+> * GYRO_LPF_CUTOFF_FREQ    100
+> * ACCEL_LPF_CUTOFF_FREQ    50
+>
+> **Ctrl-FOC驱动器参数：**
+>
+> * vel_gain = 0.0003 
+> * vel_integrator_gain = 0.006 
+
+**主要调整**
+
+前轮震颤引起的抖动，固定龙头
+
+
+
+很奇怪的是不能删掉servo线程不然无法稳定，上电要先等ctrl初始化，按住主控reset，然后几秒钟后启动则可以稳定（或者用外置电源上电后再拔掉则不影响）
+
+angle和setpoint有一个稳定偏差
+
+不能加pwm否则不稳定，但又必须初始化ledpwm否则也不稳定？？

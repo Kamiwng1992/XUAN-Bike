@@ -109,6 +109,8 @@ void TaskRobotControl(void *parameter)
 #define N 1
     float last_output[N], sum;
 
+    int v = 102;
+
     while (true)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -276,13 +278,44 @@ void TaskRobotControl(void *parameter)
     static portTickType xLastWakeTime = xTaskGetTickCount();
     const portTickType xFrequency = pdMS_TO_TICKS(20);
 
+    int v;
+    unsigned char *mCanBufByte;
+    CAN_frame_t rx_frame, tx_frame;
+    CAN_cfg.speed = CAN_SPEED_1000KBPS;
+    CAN_cfg.tx_pin_id = GPIO_NUM_5;
+    CAN_cfg.rx_pin_id = GPIO_NUM_4;
+    CAN_cfg.rx_queue = xQueueCreate(10, sizeof(CAN_frame_t));
+
+    delay(1000);
+
     while (true)
     {
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
-//
+
 //        if (abs(currentPpm - targetPpm) > 1)
 //            currentPpm = currentPpm + 0.02 * (targetPpm - currentPpm);
 //        ledcWrite(8, currentPpm);
+        //ledcWrite(8, v);
+//        v++;
+//        if (v > 150)v = 90;
+//        Serial.println("ok\n");
+
+        tx_frame.FIR.B.FF = CAN_frame_std;
+        tx_frame.MsgID = 0x109;
+        tx_frame.FIR.B.DLC = 8;
+        tx_frame.data.u8[0] = 0x01;
+        tx_frame.data.u8[1] = 0x02;
+        tx_frame.data.u8[2] = 0x80;
+        tx_frame.data.u8[3] = 0x23;
+
+        float val = motorEnable ? PID_AngleX.output : 0;
+
+        mCanBufByte = (unsigned char *) &val;
+        for (int i = 4; i < 8; i++)
+            tx_frame.data.u8[i] = *(mCanBufByte + i - 4);
+
+        ESP32Can.CANWriteFrame(&tx_frame);
+
     }
 
     Serial.println("Ending task TaskServoLerp");
