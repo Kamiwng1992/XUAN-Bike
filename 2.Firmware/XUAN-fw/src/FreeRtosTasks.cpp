@@ -109,8 +109,6 @@ void TaskRobotControl(void *parameter)
 #define N 1
     float last_output[N], sum;
 
-    int v = 102;
-
     while (true)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -152,21 +150,11 @@ void TaskRobotControl(void *parameter)
             float error = robot.mode2_pitch - PID_AngleX.setpoint;
 
             PID_AngleX.integralError += error;
-            float i_term = PID_AngleX.i * PID_AngleX.integralError;
-            if (i_term > 1000000)i_term = 1000000;
-            else if (i_term < -1000000) i_term = -1000000;
+            float i_term = constrain(PID_AngleX.i * PID_AngleX.integralError, -1000000, 1000000);
 
             PID_AngleX.output = PID_AngleX.p * error + i_term + PID_AngleX.d * robot.gx_dps_fil * 0.005;
-
+            PID_AngleX.output = constrain(PID_AngleX.output, -200000, 200000);
             PID_AngleX.lastError = error;
-
-            if (PID_AngleX.output > 200000)
-            {
-                PID_AngleX.output = 200000;
-            } else if (PID_AngleX.output < -200000)
-            {
-                PID_AngleX.output = -200000;
-            }
 
             last_output[0] = PID_AngleX.output;
             sum = last_output[0];
@@ -179,11 +167,6 @@ void TaskRobotControl(void *parameter)
 
             Serial.printf("%.3f,%.3f\n", PID_AngleX.setpoint, robot.mode2_pitch);
 
-//            else if (abs(PID_AngleX.output) < 10000)
-//            {
-//                float o = PID_AngleX.output * PID_AngleX.output;
-//                PID_AngleX.output = o * 0.0001;
-//            }
 
             tx_frame.FIR.B.FF = CAN_frame_std;
             tx_frame.MsgID = 0x104;
@@ -236,14 +219,7 @@ void TaskRobotControl(void *parameter)
                 }
 
                 PID_SpeedX.output = PID_SpeedX.p * error + i_term;
-
-                if (PID_SpeedX.output > 10)
-                {
-                    PID_SpeedX.output = 10;
-                } else if (PID_SpeedX.output < -10)
-                {
-                    PID_SpeedX.output = -10;
-                }
+                PID_SpeedX.output = constrain(PID_SpeedX.output, -10, 10);
 
                 PID_AngleX.setpoint = PID_AngleX.relax_point - PID_SpeedX.output;
             }
@@ -278,15 +254,11 @@ void TaskRobotControl(void *parameter)
     static portTickType xLastWakeTime = xTaskGetTickCount();
     const portTickType xFrequency = pdMS_TO_TICKS(20);
 
-    int v;
-    unsigned char *mCanBufByte;
-    CAN_frame_t rx_frame, tx_frame;
-    CAN_cfg.speed = CAN_SPEED_1000KBPS;
-    CAN_cfg.tx_pin_id = GPIO_NUM_5;
-    CAN_cfg.rx_pin_id = GPIO_NUM_4;
-    CAN_cfg.rx_queue = xQueueCreate(10, sizeof(CAN_frame_t));
-
     delay(1000);
+
+    unsigned char *mCanBufByte;
+    float val;
+    CAN_frame_t tx_frame;
 
     while (true)
     {
@@ -308,14 +280,11 @@ void TaskRobotControl(void *parameter)
         tx_frame.data.u8[2] = 0x80;
         tx_frame.data.u8[3] = 0x23;
 
-        float val = motorEnable ? PID_AngleX.output : 0;
-
         mCanBufByte = (unsigned char *) &val;
         for (int i = 4; i < 8; i++)
             tx_frame.data.u8[i] = *(mCanBufByte + i - 4);
 
         ESP32Can.CANWriteFrame(&tx_frame);
-
     }
 
     Serial.println("Ending task TaskServoLerp");
