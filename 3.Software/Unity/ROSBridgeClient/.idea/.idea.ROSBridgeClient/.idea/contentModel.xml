@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Pengzhihui\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Pengzhihui\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_ROSBridgeClient.-389445480.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Pengzhihui\Desktop\ROSBridgeClient" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="RosSharp" t="Include">
+          <e p="Plugins" t="Include">
+            <e p="External" t="Include">
+              <e p="Newtonsoft.Json.Bson.xml" t="Include" />
+              <e p="Newtonsoft.Json.xml" t="Include" />
+              <e p="websocket-sharp.xml" t="Include" />
+            </e>
+            <e p="Microsoft" t="Include">
+              <e p="System.Threading.Tasks.Extensions.xml" t="Include" />
+            </e>
+          </e>
+          <e p="Scripts" t="Include">
+            <e p="Extensions" t="Include">
+              <e p="HeaderExtensions.cs" t="Include" />
+              <e p="TransformExtensions.cs" t="Include" />
+            </e>
+            <e p="ROSBridgeClient" t="Include">
+              <e p="Editor" t="Include">
+                <e p="FibonacciAction" t="Include">
+                  <e p="FibonacciActionClientEditor.cs" t="Include" />
+                </e>
+                <e p="JointStatePatcherEditor.cs" t="Include" />
+                <e p="MessageGeneration" t="Include">
+                  <e p="DirectoryActionAutoGenEditorWindow.cs" t="Include" />
+                  <e p="DirectoryAutoGenEditorWindow.cs" t="Include" />
+                  <e p="DirectoryMsgAutoGenEditorWindow.cs" t="Include" />
+                  <e p="DirectorySrvAutoGenEditorWindow.cs" t="Include" />
+                  <e p="PackageActionAutoGenEditorWindow.cs" t="Include" />
+                  <e p="PackageAutoGenEditorWindow.cs" t="Include" />
+                  <e p="PackageMsgAutoGenEditorWindow.cs" t="Include" />
+                  <e p="PackageSrvAutoGenEditorWindow.cs" t="Include" />
+                  <e p="SingleActionAutoGenEditorWindow.cs" t="Include" />
+                  <e p="SingleAutoGenEditorWindow.cs" t="Include" />
+                  <e p="SingleMsgAutoGenEditorWindow.cs" t="Include" />
+                  <e p="SingleSrvAutoGenEditorWindow.cs" t="Include" />
+                </e>
+                <e p="UrdfTransfer" t="Include">
+                  <e p="TransferFromRosEditorWindow.cs" t="Include" />
+                  <e p="TransferFromRosHandler.cs" t="Include" />
+                  <e p="TransferToRosEditorWindow.cs" t="Include" />
+                  <e p="TransferToRosHandler.cs" t="Include" />
+                </e>
+              </e>
+              <e p="MessageHandling" t="Include">
+                <e p="JointStatePatcher.cs" t="Include" />
+                <e p="JointStateReader.cs" t="Include" />
+                <e p="JointStateWriter.cs" t="Include" />
+                <e p="JoyAxisInputPasser.cs" t="Include" />
+                <e p="JoyAxisJointMotorWriter.cs" t="Include" />
+                <e p="JoyAxisJointTransformWriter.cs" t="Include" />
+                <e p="JoyAxisReader.cs" t="Include" />
+                <e p="JoyAxisWriter.cs" t="Include" />
+                <e p="JoyButtonReader.cs" t="Include" />
+                <e p="JoyButtonWriter.cs" t="Include" />
+                <e p="LaserScanReader.cs" t="Include" />
+                <e p="LaserScanWriter.cs" t="Include" />
+              </e>
+              <e p="RosCommuncation" t="Include">
+                <e p="GetParamServiceProvider.cs" t="Include" />
+                <e p="ImagePublisher.cs" t="Include" />
+                <e p="ImageSubscriber.cs" t="Include" />
+                <e p="JointStatePublisher.cs" t="Include" />
+                <e p="JointStateSubscriber.cs" t="Include" />
+                <e p="JoyPublisher.cs" t="Include" />
+                <e p="JoySubscriber.cs" t="Include" />
+                <e p="LaserScanPublisher.cs" t="Include" />
+                <e p="LaserScanSubscriber.cs" t="Include" />
+                <e p="OdometrySubscriber.cs" t="Include" />
+                <e p="PoseStampedPublisher.cs" t="Include" />
+                <e p="PoseStampedSubscriber.cs" t="Include" />
+                <e p="RosConnector.cs" t="Include" />
+                <e p="StringSubscriber.cs" t="Include" />
+                <e p="TwistPublisher.cs" t="Include" />
+                <e p="TwistSubscriber.cs" t="Include" />
+                <e p="UnityFibonacciActionClient.cs" t="Include" />
+                <e p="UnityFibonacciActionSever.cs" t="Include" />
+                <e p="UnityPublisher.cs" t="Include" />
+                <e p="UnityServiceProvider.cs" t="Include" />
+                <e p="UnitySubscriber.cs" t="Include" />
+                <e p="XuanPublisher.cs" t="Include" />
+                <e p="XuanSubscriber.cs" t="Include" />
+              </e>
+              <e p="SensorDataVisualization" t="Include">
+                <e p="LaserScanVisualizer.cs" t="Include" />
+                <e p="LaserScanVisualizerLines.cs" t="Include" />
+                <e p="LaserScanVisualizerMesh.cs" t="Include" />
+                <e p="LaserScanVisualizerSpheres.cs" t="Include" />
+              </e>
+              <e p="Timing" t="Include">
+                <e p="Timer.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Urdf" t="Include">
+              <e p="Editor" t="Include">
+                <e p="AssetHandlers" t="Include">
+                  <e p="LocateAssetHandler.cs" t="Include" />
+                  <e p="UrdfAssetPathHandler.cs" t="Include" />
+                  <e p="UrdfExportPathHandler.cs" t="Include" />
+                  <e p="UrdfMeshExportHandler.cs" t="Include" />
+                </e>
+                <e p="CustomInspectors" t="Include">
+                  <e p="HingeJointLimitsManagerEditor.cs" t="Include" />
+                  <e p="UrdfCollisionEditor.cs" t="Include" />
+                  <e p="UrdfCollisionsEditor.cs" t="Include" />
+                  <e p="UrdfInertialEditor.cs" t="Include" />
+                  <e p="UrdfJointEditor.cs" t="Include" />
+                  <e p="UrdfLinkEditor.cs" t="Include" />
+                  <e p="UrdfPluginsEditor.cs" t="Include" />
+                  <e p="UrdfRobotEditor.cs" t="Include" />
+                  <e p="UrdfVisualEditor.cs" t="Include" />
+                  <e p="UrdfVisualsEditor.cs" t="Include" />
+                </e>
+                <e p="MenuItems" t="Include">
+                  <e p="UrdfExportEditorWindow.cs" t="Include" />
+                  <e p="UrdfImporterContextMenuItem.cs" t="Include" />
+                  <e p="UrdfImporterMenuItem.cs" t="Include" />
+                  <e p="UrdfRobotCreatorMenuItem.cs" t="Include" />
+                </e>
+                <e p="MeshProcessing" t="Include">
+                  <e p="ColladaAssetPostProcessor.cs" t="Include" />
+                  <e p="StlAssetPostProcessor.cs" t="Include" />
+                  <e p="StlExporter.cs" t="Include" />
+                  <e p="StlImporter.cs" t="Include" />
+                  <e p="StlReader.cs" t="Include" />
+                  <e p="StlWriter.cs" t="Include" />
+                </e>
+                <e p="UrdfComponents" t="Include">
+                  <e p="UrdfCollisionExtensions.cs" t="Include" />
+                  <e p="UrdfCollisionsExtensions.cs" t="Include" />
+                  <e p="UrdfGeometry.cs" t="Include" />
+                  <e p="UrdfGeometryCollision.cs" t="Include" />
+                  <e p="UrdfGeometryVisual.cs" t="Include" />
+                  <e p="UrdfLinkExtensions.cs" t="Include" />
+                  <e p="UrdfMaterial.cs" t="Include" />
+                  <e p="UrdfRobotExtensions.cs" t="Include" />
+                  <e p="UrdfVisualExtensions.cs" t="Include" />
+                  <e p="UrdfVisualsExtensions.cs" t="Include" />
+                </e>
+              </e>
+              <e p="JointLimitsManagers" t="Include">
+                <e p="HingeJointLimitsManager.cs" t="Include" />
+                <e p="PrismaticJointLimitsManager.cs" t="Include" />
+              </e>
+              <e p="Math" t="Include">
+                <e p="Matrix3x3.cs" t="Include" />
+              </e>
+              <e p="UrdfComponents" t="Include">
+                <e p="UrdfCollision.cs" t="Include" />
+                <e p="UrdfCollisions.cs" t="Include" />
+                <e p="UrdfInertial.cs" t="Include" />
+                <e p="UrdfJoints" t="Include">
+                  <e p="HingeJointAngleCalculator.cs" t="Include" />
+                  <e p="UrdfJoint.cs" t="Include" />
+                  <e p="UrdfJointContinuous.cs" t="Include" />
+                  <e p="UrdfJointFixed.cs" t="Include" />
+                  <e p="UrdfJointFloating.cs" t="Include" />
+                  <e p="UrdfJointPlanar.cs" t="Include" />
+                  <e p="UrdfJointPrismatic.cs" t="Include" />
+                  <e p="UrdfJointRevolute.cs" t="Include" />
+                </e>
+                <e p="UrdfLink.cs" t="Include" />
+                <e p="UrdfOrigin.cs" t="Include" />
+                <e p="UrdfPlugin.cs" t="Include" />
+                <e p="UrdfPlugins.cs" t="Include" />
+                <e p="UrdfRobot.cs" t="Include" />
+                <e p="UrdfVisual.cs" t="Include" />
+                <e p="UrdfVisuals.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="RosSharpMessages" t="Include">
+          <e p="UnityRosBridge" t="Include">
+            <e p="msg" t="Include">
+              <e p="Xuan.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="ROSBridgeClient.sln" t="IncludeFlat" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
