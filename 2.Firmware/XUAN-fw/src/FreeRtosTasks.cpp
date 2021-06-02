@@ -271,12 +271,15 @@ void TaskRobotControl(void *parameter)
 //        v++;
 //        if (v > 150)v = 90;
 //        Serial.println("ok\n");
+        val++;
+        if (val > 180)
+            val = 0;
 
         tx_frame.FIR.B.FF = CAN_frame_std;
-        tx_frame.MsgID = 0x109;
+        tx_frame.MsgID = 0x104;
         tx_frame.FIR.B.DLC = 8;
-        tx_frame.data.u8[0] = 0x01;
-        tx_frame.data.u8[1] = 0x02;
+        tx_frame.data.u8[0] = 0x03;
+        tx_frame.data.u8[1] = 0x00;
         tx_frame.data.u8[2] = 0x80;
         tx_frame.data.u8[3] = 0x23;
 
