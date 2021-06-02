@@ -16,6 +16,9 @@
 #define FRICTION 0
 
 #define FILTER_RATIO 0.999
+/*低通滤波参数*/
+#define GYRO_LPF_CUTOFF_FREQ    100
+#define ACCEL_LPF_CUTOFF_FREQ    50
 
 
 class Robot
@@ -41,6 +44,9 @@ public:
     float mode2_pitch;
     float mode1_pitch;
     float mode1_roll;
+
+    float turnSetpoint;
+    float turnCurrent;
 
 private:
 

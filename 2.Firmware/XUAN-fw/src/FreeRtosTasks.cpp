@@ -59,11 +59,6 @@ void InitTasks()
     timerAlarmEnable(timer);
 }
 
-/*低通滤波参数*/
-#define GYRO_LPF_CUTOFF_FREQ    100
-biquadFilter_t gyroFilterLPF[3];//二阶低通滤波器
-#define ACCEL_LPF_CUTOFF_FREQ    50
-biquadFilter_t accFilterLPF[3];//二阶低通滤波器
 
 [[noreturn]]
 void TaskRobotControl(void *parameter)
@@ -96,6 +91,9 @@ void TaskRobotControl(void *parameter)
     accelgyro.setYGyroOffset(-23);
     accelgyro.setZGyroOffset(6);
 
+    // Init Filter
+    biquadFilter_t gyroFilterLPF[3];
+    biquadFilter_t accFilterLPF[3];
     for (int axis = 0; axis < 3; axis++)
     {
         biquadFilterInitLPF(&gyroFilterLPF[axis], 200, GYRO_LPF_CUTOFF_FREQ); //200Hz
@@ -105,9 +103,6 @@ void TaskRobotControl(void *parameter)
     // Init PID
     PID_AngleX.setpoint = PID_AngleX.relax_point;
     PID_SpeedX.integralError = 0;
-
-#define N 1
-    float last_output[N], sum;
 
     while (true)
     {
@@ -156,18 +151,6 @@ void TaskRobotControl(void *parameter)
             PID_AngleX.output = constrain(PID_AngleX.output, -200000, 200000);
             PID_AngleX.lastError = error;
 
-            last_output[0] = PID_AngleX.output;
-            sum = last_output[0];
-            for (int i = 1; i < N; i++)
-            {
-                sum += last_output[i];
-                last_output[i] = last_output[i - 1];
-            }
-            PID_AngleX.output = sum / N;
-
-            Serial.printf("%.3f,%.3f\n", PID_AngleX.setpoint, robot.mode2_pitch);
-
-
             tx_frame.FIR.B.FF = CAN_frame_std;
             tx_frame.MsgID = 0x104;
             tx_frame.FIR.B.DLC = 8;
@@ -183,6 +166,9 @@ void TaskRobotControl(void *parameter)
                 tx_frame.data.u8[i] = *(mCanBufByte + i - 4);
 
             ESP32Can.CANWriteFrame(&tx_frame);
+
+            // Print debug msgs.
+            Serial.printf("%.3f,%.3f\n", PID_AngleX.setpoint, robot.mode2_pitch);
         } else // every 10ms at 100Hz
         {
         }
@@ -264,16 +250,8 @@ void TaskRobotControl(void *parameter)
     {
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
-//        if (abs(currentPpm - targetPpm) > 1)
-//            currentPpm = currentPpm + 0.02 * (targetPpm - currentPpm);
-//        ledcWrite(8, currentPpm);
-        //ledcWrite(8, v);
-//        v++;
-//        if (v > 150)v = 90;
-//        Serial.println("ok\n");
-        val++;
-        if (val > 180)
-            val = 0;
+        if (abs(robot.turnSetpoint - robot.turnCurrent) > 0.3f)
+            robot.turnCurrent = robot.turnCurrent + 0.05 * (robot.turnSetpoint - robot.turnCurrent);
 
         tx_frame.FIR.B.FF = CAN_frame_std;
         tx_frame.MsgID = 0x104;
@@ -283,6 +261,7 @@ void TaskRobotControl(void *parameter)
         tx_frame.data.u8[2] = 0x80;
         tx_frame.data.u8[3] = 0x23;
 
+        val = 90 - robot.turnCurrent;
         mCanBufByte = (unsigned char *) &val;
         for (int i = 4; i < 8; i++)
             tx_frame.data.u8[i] = *(mCanBufByte + i - 4);

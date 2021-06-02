@@ -15,10 +15,11 @@ Command cmdAx;
 Command cmdAy;
 Command cmdSx;
 Command cmdSy;
+Command cmdTurn;
 
 
 //HardwareSerial CtrlSerial(1);
-//HardwareSerial RPiSerial(2);
+HardwareSerial RPiSerial(1);
 
 
 void HandleInterrupt();
@@ -29,8 +30,9 @@ void setup()
      * Init Serials
      */
     Serial.begin(115200);
+    RPiSerial.begin(115200, SERIAL_8N1, 38, 37);
+
     // CtrlSerial.begin(115200, SERIAL_8N1, 14, 13);
-    // RPiSerial.begin(115200, SERIAL_8N1, 38, 37);
     pinMode(26, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(26), HandleInterrupt, FALLING);
 
@@ -63,7 +65,9 @@ void setup()
     cmdSy.addArg("d", 0);
     cmdSy.setDescription(" Set AngleX PID params.");
 
-
+    cmdTurn = cli.addCmd("turn");
+    cmdTurn.addPosArg("a", 0);
+    cmdTurn.setDescription(" Set servo angle.");
 
 
     /*
@@ -95,6 +99,19 @@ void loop()
         if (Serial.available())
         {
             String input = Serial.readStringUntil('\n');
+
+            if (input.length() > 0)
+            {
+                Serial.print("# ");
+                Serial.println(input);
+
+                cli.parse(input);
+            }
+        }
+
+        if (RPiSerial.available())
+        {
+            String input = RPiSerial.readStringUntil('\n');
 
             if (input.length() > 0)
             {
@@ -182,6 +199,10 @@ void loop()
                     PID_SpeedY.d = c.getArgument("d").getValue().toFloat();
 
                 Serial.printf("PID of SY: %.3f,%.3f,%.3f\n", PID_SpeedY.p, PID_SpeedY.i, PID_SpeedY.d);
+            } else if (c == cmdTurn)
+            {
+                float angle = c.getArgument(0).getValue().toFloat();
+                robot.turnSetpoint = angle;
             }
         }
 
