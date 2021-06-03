@@ -270,6 +270,19 @@ void TaskRobotControl(void *parameter)
             tx_frame.data.u8[i] = *(mCanBufByte + i - 4);
 
         ESP32Can.CANWriteFrame(&tx_frame);
+
+
+        tx_frame.data.u8[0] = 0x00;
+        tx_frame.data.u8[1] = 0x02;
+        tx_frame.data.u8[2] = 0x80;
+        tx_frame.data.u8[3] = 0x23;
+
+        val = robot.speedSetpoint;
+        mCanBufByte = (unsigned char *) &val;
+        for (int i = 4; i < 8; i++)
+            tx_frame.data.u8[i] = *(mCanBufByte + i - 4);
+
+        ESP32Can.CANWriteFrame(&tx_frame);
     }
 
     Serial.println("Ending task TaskServoLerp");

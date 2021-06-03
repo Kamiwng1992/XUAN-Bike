@@ -15,7 +15,7 @@ Command cmdAx;
 Command cmdAy;
 Command cmdSx;
 Command cmdSy;
-Command cmdTurn;
+Command cmdMove;
 
 
 //HardwareSerial CtrlSerial(1);
@@ -65,9 +65,10 @@ void setup()
     cmdSy.addArg("d", 0);
     cmdSy.setDescription(" Set AngleX PID params.");
 
-    cmdTurn = cli.addCmd("turn");
-    cmdTurn.addPosArg("a", 0);
-    cmdTurn.setDescription(" Set servo angle.");
+    cmdMove = cli.addCmd("move");
+    cmdMove.addPosArg("a", 0);
+    cmdMove.addPosArg("s", 0);
+    cmdMove.setDescription(" Set servo angle.");
 
 
     /*
@@ -201,10 +202,12 @@ void loop()
                     PID_SpeedY.d = c.getArgument("d").getValue().toFloat();
 
                 Serial.printf("PID of SY: %.3f,%.3f,%.3f\n", PID_SpeedY.p, PID_SpeedY.i, PID_SpeedY.d);
-            } else if (c == cmdTurn)
+            } else if (c == cmdMove)
             {
-                float angle = c.getArgument(0).getValue().toFloat();
+                float angle = c.getArgument(0).getValue().toFloat() / 5; // +-20
+                float speed = c.getArgument(1).getValue().toFloat() * 300; // +-30000
                 robot.turnSetpoint = angle;
+                robot.speedSetpoint = speed;
             }
         }
 

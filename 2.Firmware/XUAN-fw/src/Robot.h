@@ -47,6 +47,7 @@ public:
 
     float turnSetpoint;
     float turnCurrent;
+    float speedSetpoint;
 
 private:
 

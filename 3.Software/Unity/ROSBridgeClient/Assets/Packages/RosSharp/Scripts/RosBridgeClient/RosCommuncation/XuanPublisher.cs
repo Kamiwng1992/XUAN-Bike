@@ -34,9 +34,11 @@ namespace RosSharp.RosBridgeClient
         {
         }
 
-        public void SetServoAngle(float angle)
+        public void SetMove(float angle, float speed)
         {
             message.servo_angle = angle;
+            message.speed = speed;
+
             Publish(message);
         }
     }
