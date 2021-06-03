@@ -30,7 +30,7 @@ void setup()
      * Init Serials
      */
     Serial.begin(115200);
-    RPiSerial.begin(115200, SERIAL_8N1, 38, 37);
+    RPiSerial.begin(115200, SERIAL_8N1, 37, 38);
 
     // CtrlSerial.begin(115200, SERIAL_8N1, 14, 13);
     pinMode(26, INPUT_PULLUP);
@@ -205,7 +205,7 @@ void loop()
             } else if (c == cmdMove)
             {
                 float angle = c.getArgument(0).getValue().toFloat() / 5; // +-20
-                float speed = c.getArgument(1).getValue().toFloat() * 300; // +-30000
+                float speed = c.getArgument(1).getValue().toFloat() * 200; // +-30000
                 robot.turnSetpoint = angle;
                 robot.speedSetpoint = speed;
             }
