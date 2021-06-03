@@ -5,7 +5,7 @@ TaskHandle_t handleTaskRobotControl;
 TaskHandle_t handleTaskServoLerp;
 TaskHandle_t handleTaskDisplay;
 
-bool motorEnable = false;
+volatile bool motorEnable = false;
 
 hw_timer_t *timer = NULL;
 
@@ -28,16 +28,16 @@ void InitTasks()
     xTaskCreatePinnedToCore(
         TaskRobotControl,
         "TaskRobotControl",
-        10000,
+        20000,
         NULL,
-        3,
+        configMAX_PRIORITIES - 1,
         &handleTaskRobotControl,
         0);
 
     xTaskCreatePinnedToCore(
         TaskServoLerp,
         "TaskServoLerp",
-        10000,
+        3000,
         NULL,
         2,
         &handleTaskServoLerp,
@@ -46,11 +46,12 @@ void InitTasks()
     xTaskCreatePinnedToCore(
         TaskDisplay,
         "TaskDisplay",
-        10000,
+        3000,
         NULL,
         1,
         &handleTaskDisplay,
         1);
+
 
     // 5ms period hardware timer, to invoke TaskRobotControl
     timer = timerBegin(0, 80, true);
@@ -78,6 +79,7 @@ void TaskRobotControl(void *parameter)
     // Init MPU6050
     Wire1.begin(32, 33);
     Wire1.setClock(400000);
+    delay(10);
     do
     {
         accelgyro.initialize();

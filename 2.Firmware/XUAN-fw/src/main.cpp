@@ -89,6 +89,8 @@ void setup()
     * Init FreeRTOS Tasks
     */
     InitTasks();
+
+    delay(200);
 }
 
 
