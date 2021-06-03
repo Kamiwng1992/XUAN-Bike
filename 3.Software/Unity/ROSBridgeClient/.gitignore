@@ -5,7 +5,7 @@
 # ignoring Unity Project Folder ProjectSettings
 # ignoring Visual Studio project file (*.VD.db)
 # ignoring Visual Studio 2015 folder .vs/
-# © Siemens AG, 2017-2018, Dr. Martin Bischoff (martin.bischoff@siemens.com)
+# ï¿½ Siemens AG, 2017-2018, Dr. Martin Bischoff (martin.bischoff@siemens.com)
 
 ### Unity ###
 [Ll]ibrary/
@@ -16,7 +16,6 @@
 [Ll]ogs/
 [Aa]ssets/AssetStoreTools*
 [Pp]roject[Ss]ettings/
-[Pp]ackages/
 [Uu]nity[Pp]ackage[Mm]anager/
 .vs/
 
@@ -42,4 +41,3 @@ sysinfo.txt
 
 # Builds
 *.apk
-*.unitypackage
