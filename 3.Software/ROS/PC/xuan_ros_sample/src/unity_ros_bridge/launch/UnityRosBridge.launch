@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+ 
+
+<launch>
+    <arg name="port" default="9090" />
+
+	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+		<arg name="port" value="9090" />
+	</include>
+    
+	<node name="ros_bridge" pkg="file_server" type="file_server" output="screen" />
+    <!-- <node name="unity_ros_bridge_publisher_node" pkg="unity_ros_bridge" type="data_publisher" output="screen" /> -->
+	<!-- <node name="unity_ros_bridge_subscriber_node" pkg="unity_ros_bridge" type="data_subscriber.py" output="screen" /> -->
+
+</launch>
