@@ -138,7 +138,7 @@ void TaskRobotControl(void *parameter)
 
         float mode2_pitch = -atan2(robot.ay_g_fil, robot.az_g_fil) * RAD_TO_DEG;
         robot.mode2_pitch =
-            FILTER_RATIO * (robot.mode2_pitch + robot.gx_dps_fil * 0.005) + (1 - FILTER_RATIO) * mode2_pitch;
+            COMP_FILTER_RATIO * (robot.mode2_pitch + robot.gx_dps_fil * 0.005) + (1 - COMP_FILTER_RATIO) * mode2_pitch;
 
         if (tick % 2) // every 10ms at 100Hz
         {
@@ -147,8 +147,9 @@ void TaskRobotControl(void *parameter)
             PID_AngleX.integralError += error;
             float i_term = constrain(PID_AngleX.i * PID_AngleX.integralError, -1000000, 1000000);
 
-            PID_AngleX.output = PID_AngleX.p * error + i_term + PID_AngleX.d * robot.gx_dps_fil * 0.005;
-            PID_AngleX.output = constrain(PID_AngleX.output, -200000, 200000);
+            PID_AngleX.output =
+                PID_AngleX.p * error + i_term + PID_AngleX.d * robot.gx_dps_fil * 0.01; //0.01 for PID 10ms period
+            PID_AngleX.output = constrain(PID_AngleX.output, -MAX_OUTPUT_MOTOR_SPEED, MAX_OUTPUT_MOTOR_SPEED);
             PID_AngleX.lastError = error;
 
             tx_frame.FIR.B.FF = CAN_frame_std;
@@ -194,14 +195,14 @@ void TaskRobotControl(void *parameter)
                 PID_SpeedX.integralError += error;
 
                 float i_term = PID_SpeedX.i * PID_SpeedX.integralError;
-                if (i_term > 10)
+                if (i_term > SX_INTERGRAL_MAX_ANGLE)
                 {
-                    i_term = 10;
-                    PID_SpeedX.integralError = 5 / PID_SpeedX.i;
-                } else if (i_term < -10)
+                    i_term = SX_INTERGRAL_MAX_ANGLE;
+                    PID_SpeedX.integralError = SX_INTERGRAL_MAX_ANGLE / PID_SpeedX.i;
+                } else if (i_term < -SX_INTERGRAL_MAX_ANGLE)
                 {
-                    i_term = -10;
-                    PID_SpeedX.integralError = -5 / PID_SpeedX.i;
+                    i_term = -SX_INTERGRAL_MAX_ANGLE;
+                    PID_SpeedX.integralError = -SX_INTERGRAL_MAX_ANGLE / PID_SpeedX.i;
                 }
 
                 PID_SpeedX.output = PID_SpeedX.p * error + i_term;

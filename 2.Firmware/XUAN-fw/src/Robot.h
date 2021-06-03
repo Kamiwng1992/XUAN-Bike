@@ -15,11 +15,11 @@
 #define INERTIA 1
 #define FRICTION 0
 
-#define FILTER_RATIO 0.999
-/*低通滤波参数*/
-#define GYRO_LPF_CUTOFF_FREQ    100
-#define ACCEL_LPF_CUTOFF_FREQ    50
-
+#define COMP_FILTER_RATIO           0.999
+#define GYRO_LPF_CUTOFF_FREQ        100
+#define ACCEL_LPF_CUTOFF_FREQ       50
+#define MAX_OUTPUT_MOTOR_SPEED      200000
+#define SX_INTERGRAL_MAX_ANGLE      10
 
 class Robot
 {

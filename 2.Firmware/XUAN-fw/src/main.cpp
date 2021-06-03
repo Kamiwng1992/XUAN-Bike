@@ -188,7 +188,7 @@ void loop()
                 if (c.getArgument("d").isSet())
                     PID_SpeedX.d = c.getArgument("d").getValue().toFloat();
 
-                Serial.printf("PID of SX: %.6f,%.6f,%.6f\n", PID_SpeedX.p, PID_SpeedX.i, PID_SpeedX.d);
+                Serial.printf("PID of SX: %.8f,%.8f,%.8f\n", PID_SpeedX.p, PID_SpeedX.i, PID_SpeedX.d);
             } else if (c == cmdSy)
             {
                 if (c.getArgument("p").isSet())
