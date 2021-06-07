@@ -22,9 +22,7 @@
     <list default="true" id="4321ce94-d5fb-4b11-801e-93fd2d07b8b1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ROSBridgeClient/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ROSBridgeClient/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ROSBridgeClient/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ROSBridgeClient/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Packages/RosSharp/Scripts/RosBridgeClient/RosCommuncation/XuanPublisher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Packages/RosSharp/Scripts/RosBridgeClient/RosCommuncation/XuanPublisher.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/XuanMain.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/XuanMain.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ControlXuan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ControlXuan.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +40,7 @@
         <option value="$PROJECT_DIR$/Assets/Packages/InControl/Examples/Basic/BasicExample.cs" />
         <option value="$PROJECT_DIR$/Assets/Packages/RosSharp/Scripts/RosBridgeClient/RosCommuncation/XuanPublisher.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/ControlXuan.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/RandomShake.cs" />
       </list>
     </option>
   </component>
@@ -90,6 +89,7 @@
       <workItem from="1622634056692" duration="286000" />
       <workItem from="1622637152886" duration="1103000" />
       <workItem from="1622713581624" duration="1560000" />
+      <workItem from="1622924513332" duration="2032000" />
     </task>
     <servers />
   </component>
